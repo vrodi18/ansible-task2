@@ -3,22 +3,33 @@
     name: apache2
     state: latest
     update_cache: yes
+
+- name: Start and Enable  
   service:
     name: apache2
     state: started
+    enabled: yes
+  notify: Ubuntu restart httpd
+
+
 - name: Download Templates
   get_url:
     url: https://www.free-css.com/assets/files/free-css-templates/download/page253/travel.zip
     dest: /var/www/html/
+
 - name: Install unzip
   apt:
     name: unzip
     state: latest
+    update_cache: yes
+
 - name: unzip 
   unarchive:
     src: /var/www/html/travel.zip
     dest: /var/www/html/
     remote_src: yes
+
 - name: Move Files
-  shell: mv /var/www/html/free-bootstrap-theme-t-master/*  /var/www/html/
-  notify: Debian restart httpd
+  shell: rsync -r /var/www/html/free-bootstrap-theme-t-master/  /var/www/html/
+  notify: Ubuntu restart httpd
+  

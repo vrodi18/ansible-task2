@@ -1,12 +1,13 @@
 - hosts: all
-  tasks:
-  - include_tasks: "{{ ansible_os_family }}-httpd.yml"
   handlers:
   - name: Redhat restart httpd
     service:
       name: httpd
       state: restarted
-  - name: Debian restart httpd
+  - name: Ubuntu restart httpd
     service:
       name: apache2
       state: restarted
+  tasks:
+  - include_tasks: "{{ ansible_os_family }}-httpd.yml"
+  

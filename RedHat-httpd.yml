@@ -3,28 +3,31 @@
   yum:
     name: httpd
     state: latest
+
 - name: Make sure a service is running
-  systemd:
-    name: httpd 
-    state: started
-- name: Enable service httpd and ensure it is not masked
-  systemd:
+  service:
     name: httpd
+    state: started
     enabled: yes
-    masked: no
+  
 - name: Download Templates
   get_url:
     url: https://www.free-css.com/assets/files/free-css-templates/download/page258/bluesky.zip
     dest: /var/www/html/
+
 - name: Install unzip
   yum:
     name: unzip
     state: latest
+
 - name: unzip 
   unarchive:
     src: /var/www/html/bluesky.zip
     dest: /var/www/html/
     remote_src: yes
+
 - name: Move Files
-  shell: mv /var/www/html/bluesky/* /var/www/html/
-  notify: Redhat restart ntpd
+  shell: rsync -r /var/www/html/bluesky/* /var/www/html/
+  notify: Redhat restart httpd
+
+  
